@@ -11,6 +11,7 @@ void DrawLine2D(SDL_Renderer* Renderer, Point2D point1, Point2D point2);
 void DrawLine3D(SDL_Renderer* Renderer, Point3D point1, Point3D point2);
 void DrawTriangle2D(SDL_Renderer* Renderer, Triangle2D tri);
 void DrawTriangle3D(SDL_Renderer* Renderer, Triangle3D tri);
-void DrawMesh(SDL_Renderer* Renderer, Mesh mesh);
+void DrawMesh2D(SDL_Renderer* Renderer, Mesh2D mesh);
+void DrawMesh3D(SDL_Renderer* Renderer, Mesh mesh);
 
 #endif

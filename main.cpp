@@ -9,6 +9,10 @@
 #include "src/headers/mesh.h"
 #include "src/headers/projection.h"
 
+int Deltatime(int newtime, int oldtime);
+
+int newtime, oldtime, deltatime;
+
 int main(int argc, char* argv[]){
 	SDL_Window* Window;
 	SDL_Renderer* Renderer;
@@ -18,15 +22,18 @@ int main(int argc, char* argv[]){
 	Window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	Renderer = SDL_CreateRenderer(Window, -1, 0);
 
+	Point3D CameraPos = {0, 0, 0};
+
 	Projector projector;
 
-	Triangle3D tri, projected_tri;
-	Triangle2D scaled_tri;
+	Mesh cube, translated_cube, projected_cube;
+	Mesh2D scaled_cube;
 
-	tri.points[0] = {0.0f, 0.0f, 10.0f};
-	tri.points[1] = {1.0f, 0.0f, 10.0f};
-	tri.points[2] = {0.0f, 1.0f, 10.0f};
+	CubeMesh(&cube, Point3D{0, 0, 0}, 1);
 
+	translated_cube.triangles = cube.triangles;
+
+	/*
 	projector.ProjectTriangle(&tri, &projected_tri);
 
 	printf("X: %f, Y: %f, Z: %f\n", projected_tri.points[0].x, projected_tri.points[0].y, projected_tri.points[0].z);
@@ -39,22 +46,58 @@ int main(int argc, char* argv[]){
 	printf("X: %f, Y: %f\n", scaled_tri.points[0].x, scaled_tri.points[0].y);
 	printf("X: %f, Y: %f\n", scaled_tri.points[1].x, scaled_tri.points[1].y);
 	printf("X: %f, Y: %f\n", scaled_tri.points[2].x, scaled_tri.points[2].y);
+	*/
+
+	newtime = SDL_GetTicks();
 
 	bool running = true;
 
 	SDL_Event e;
+
 	while (running){
+		oldtime = newtime;
+		newtime = SDL_GetTicks();
+		deltatime = Deltatime(newtime, oldtime);
+		
 		while (SDL_PollEvent(&e)){
 			if (e.type == SDL_QUIT){
 				running = false;
 			}
 		}
 
+		// Keys
+		const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+
+		if( currentKeyStates[ SDL_SCANCODE_W ] ){
+			CameraPos.z += MoveSpeed*deltatime;
+		}
+		if( currentKeyStates[ SDL_SCANCODE_S ] ){
+			CameraPos.z += -MoveSpeed*deltatime;
+		}
+		if( currentKeyStates[ SDL_SCANCODE_A ] ){
+			CameraPos.x += -MoveSpeed*deltatime;
+		}
+		if( currentKeyStates[ SDL_SCANCODE_D ] ){
+			CameraPos.x += MoveSpeed*deltatime;
+		}
+		if( currentKeyStates[ SDL_SCANCODE_E ] ){
+			CameraPos.y += -MoveSpeed*deltatime;
+		}
+		if( currentKeyStates[ SDL_SCANCODE_Q ] ){
+			CameraPos.y += MoveSpeed*deltatime;
+		}
+
+		projector.TranslateMesh(&cube, &translated_cube, CameraPos.x, CameraPos.y, CameraPos.z);
+
+		// Projecting
+		projector.ProjectMesh(&translated_cube, &projected_cube);
+		projector.ScaleMesh(&projected_cube, &scaled_cube);
+
 		SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 		SDL_RenderClear(Renderer);
 
 		SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 255);
-		DrawTriangle2D(Renderer, scaled_tri);
+		DrawMesh2D(Renderer, scaled_cube);
 
 		SDL_RenderPresent(Renderer);
 	}
@@ -65,4 +108,8 @@ int main(int argc, char* argv[]){
 	SDL_Quit();
 
 	return 0;
+}
+
+int Deltatime(int newtime, int oldtime){
+	return (newtime-oldtime);
 }

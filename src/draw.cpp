@@ -28,8 +28,14 @@ void DrawTriangle3D(SDL_Renderer* Renderer, Triangle3D tri){
 	DrawLine3D(Renderer, tri.points[2], tri.points[0]);
 }
 
-void DrawMesh(SDL_Renderer* Renderer, Mesh mesh){
+void DrawMesh3D(SDL_Renderer* Renderer, Mesh mesh){
 	for (Triangle3D tri : mesh.triangles){
 		DrawTriangle3D(Renderer, tri);
+	}
+}
+
+void DrawMesh2D(SDL_Renderer* Renderer, Mesh2D mesh){
+	for (Triangle2D tri : mesh.triangles){
+		DrawTriangle2D(Renderer, tri);
 	}
 }

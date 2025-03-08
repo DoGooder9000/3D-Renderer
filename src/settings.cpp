@@ -12,3 +12,5 @@ const float fFar = 1000;
 const float fAspectRatio = WINDOW_WIDTH / WINDOW_HEIGHT;
 
 const float fFOVRad = 1.0f / tanf(FOV / 2);
+
+float MoveSpeed = 1.f / 800.f;

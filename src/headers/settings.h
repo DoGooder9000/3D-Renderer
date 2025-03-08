@@ -16,4 +16,6 @@ extern const float fAspectRatio;
 
 extern const float fFOVRad;
 
+extern float MoveSpeed;
+
 #endif

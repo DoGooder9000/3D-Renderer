@@ -51,8 +51,8 @@ void Projector::ScalePoint2D(Point2D* in, Point2D* out){
 	out->x += 1.0f;
 	out->y += 1.0f;
 
-	out->x *= 0.5f * WINDOW_WIDTH;
-	out->y *= 0.5f * WINDOW_HEIGHT;
+	out->x *= 0.5f * (float)WINDOW_WIDTH;
+	out->y *= 0.5f * (float)WINDOW_HEIGHT;
 }
 
 void Projector::ScaleTriangle(Triangle3D* in, Triangle2D* out){
@@ -62,4 +62,38 @@ void Projector::ScaleTriangle(Triangle3D* in, Triangle2D* out){
 	ScalePoint2D(&(temp_tri.points[0]), &(out->points[0]));
 	ScalePoint2D(&(temp_tri.points[1]), &(out->points[1]));
 	ScalePoint2D(&(temp_tri.points[2]), &(out->points[2]));
+}
+
+void Projector::ScaleMesh(Mesh* in, Mesh2D* out){
+	out->triangles.clear();
+
+	Triangle2D temp_tri;
+
+	for (Triangle3D tri : in->triangles){
+		ScaleTriangle(&tri, &temp_tri);
+		out->triangles.push_back(temp_tri);
+	}
+}
+
+void Projector::TranslatePoint(Point3D* in, Point3D* out, float x, float y, float z){
+	out->x = in->x + x;
+	out->y = in->y + y;
+	out->z = in->z + z;
+}
+
+void Projector::TranslateTriangle(Triangle3D* in, Triangle3D* out, float x, float y, float z){
+	TranslatePoint(&(in->points[0]), &(out->points[0]), x, y, z);
+	TranslatePoint(&(in->points[1]), &(out->points[1]), x, y, z);
+	TranslatePoint(&(in->points[2]), &(out->points[2]), x, y, z);
+}
+
+void Projector::TranslateMesh(Mesh* in, Mesh* out, float x, float y, float z){
+	out->triangles.clear();
+
+	Triangle3D temp_tri;
+
+	for (Triangle3D tri : in->triangles){
+		TranslateTriangle(&tri, &temp_tri, x, y, z);
+		out->triangles.push_back(temp_tri);
+	}
 }
