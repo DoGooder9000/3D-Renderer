@@ -5,11 +5,15 @@
 #include <vector>
 
 typedef struct{
-	Point3D points[3];
-} Triangle;
+	Point2D points[3];
+} Triangle2D;
 
 typedef struct{
-	std::vector<Triangle> triangles;
+	Point3D points[3];
+} Triangle3D;
+
+typedef struct{
+	std::vector<Triangle3D> triangles;
 } Mesh;
 
 #endif
