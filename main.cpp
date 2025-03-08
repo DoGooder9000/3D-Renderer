@@ -10,8 +10,10 @@
 #include "src/headers/projection.h"
 
 int Deltatime(int newtime, int oldtime);
+float FPS(int deltatime);
 
 int newtime, oldtime, deltatime;
+char window_title[20];
 
 int main(int argc, char* argv[]){
 	SDL_Window* Window;
@@ -22,31 +24,26 @@ int main(int argc, char* argv[]){
 	Window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 	Renderer = SDL_CreateRenderer(Window, -1, 0);
 
-	Point3D CameraPos = {0, 0, 0};
+	Point3D CameraPos = {0, 0, -10};
 
 	Projector projector;
 
-	Mesh cube, translated_cube, projected_cube;
-	Mesh2D scaled_cube;
+	Mesh WorldMesh, translated, projected;
+	Mesh2D scaled;
 
-	CubeMesh(&cube, Point3D{0, 0, 0}, 1);
+	Mesh cube;
 
-	translated_cube.triangles = cube.triangles;
+	for (float i=0; i<10; i++){
+		for (float j=0; j<1; j++){
+			for (float k=0; k<10; k++){
+				CubeMesh(&cube, Point3D{i, j, k}, 1);
+				WorldMesh.triangles.insert( WorldMesh.triangles.end(), cube.triangles.begin(), cube.triangles.end() );
+			}
+		}
+	}
 
-	/*
-	projector.ProjectTriangle(&tri, &projected_tri);
+	translated.triangles = WorldMesh.triangles;
 
-	printf("X: %f, Y: %f, Z: %f\n", projected_tri.points[0].x, projected_tri.points[0].y, projected_tri.points[0].z);
-	printf("X: %f, Y: %f, Z: %f\n", projected_tri.points[1].x, projected_tri.points[1].y, projected_tri.points[1].z);
-	printf("X: %f, Y: %f, Z: %f\n", projected_tri.points[2].x, projected_tri.points[2].y, projected_tri.points[2].z);
-	printf("%f\n", fFOVRad);
-
-	projector.ScaleTriangle(&projected_tri, &scaled_tri);
-
-	printf("X: %f, Y: %f\n", scaled_tri.points[0].x, scaled_tri.points[0].y);
-	printf("X: %f, Y: %f\n", scaled_tri.points[1].x, scaled_tri.points[1].y);
-	printf("X: %f, Y: %f\n", scaled_tri.points[2].x, scaled_tri.points[2].y);
-	*/
 
 	newtime = SDL_GetTicks();
 
@@ -80,26 +77,29 @@ int main(int argc, char* argv[]){
 		if( currentKeyStates[ SDL_SCANCODE_D ] ){
 			CameraPos.x += MoveSpeed*deltatime;
 		}
-		if( currentKeyStates[ SDL_SCANCODE_E ] ){
+		if( currentKeyStates[ SDL_SCANCODE_SPACE ] ){
 			CameraPos.y += -MoveSpeed*deltatime;
 		}
-		if( currentKeyStates[ SDL_SCANCODE_Q ] ){
+		if( currentKeyStates[ SDL_SCANCODE_LSHIFT ] ){
 			CameraPos.y += MoveSpeed*deltatime;
 		}
 
-		projector.TranslateMesh(&cube, &translated_cube, CameraPos.x, CameraPos.y, CameraPos.z);
+		projector.TranslateMesh(&WorldMesh, &translated, -CameraPos.x, -CameraPos.y, -CameraPos.z);
 
 		// Projecting
-		projector.ProjectMesh(&translated_cube, &projected_cube);
-		projector.ScaleMesh(&projected_cube, &scaled_cube);
+		projector.ProjectMesh(&translated, &projected);
+		projector.ScaleMesh(&projected, &scaled);
 
 		SDL_SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 		SDL_RenderClear(Renderer);
 
 		SDL_SetRenderDrawColor(Renderer, 255, 0, 0, 255);
-		DrawMesh2D(Renderer, scaled_cube);
+		DrawMesh2D(Renderer, scaled);
 
 		SDL_RenderPresent(Renderer);
+
+		snprintf(window_title, sizeof(window_title), "FPS: %.2f", FPS(deltatime));
+		SDL_SetWindowTitle(Window, window_title);
 	}
 
 	SDL_DestroyRenderer(Renderer);
@@ -112,4 +112,12 @@ int main(int argc, char* argv[]){
 
 int Deltatime(int newtime, int oldtime){
 	return (newtime-oldtime);
+}
+
+float FPS(int deltatime){
+	if (deltatime != 0){
+		return 1000.f / (float)deltatime;
+	}
+
+	return 1000.f;
 }
