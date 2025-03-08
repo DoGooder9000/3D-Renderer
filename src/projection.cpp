@@ -57,12 +57,7 @@ void Projector::ScalePoint2D(Point2D* in, Point2D* out){
 
 void Projector::ScaleTriangle(Triangle3D* in, Triangle2D* out){
 	Triangle2D temp_tri;
-	temp_tri.points[0].x = in->points[0].x;
-	temp_tri.points[0].y = in->points[0].y;
-	temp_tri.points[1].x = in->points[1].x;
-	temp_tri.points[1].y = in->points[1].y;
-	temp_tri.points[2].x = in->points[2].x;
-	temp_tri.points[2].y = in->points[2].y;
+	Triangle3DtoTriangle2D(in, &temp_tri);
 
 	ScalePoint2D(&(temp_tri.points[0]), &(out->points[0]));
 	ScalePoint2D(&(temp_tri.points[1]), &(out->points[1]));
