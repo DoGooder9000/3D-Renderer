@@ -1,4 +1,4 @@
-#include "headers/projection.h"
+#include "headers/projection.hpp"
 
 Projector::Projector(){
 	Projector::InitProjMat();

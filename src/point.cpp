@@ -1,1 +1,1 @@
-#include "headers/point.h"
+#include "headers/point.hpp"

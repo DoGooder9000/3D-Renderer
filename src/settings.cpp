@@ -1,4 +1,4 @@
-#include "headers/settings.h"
+#include "headers/settings.hpp"
 
 const double PI = 3.141592653589;
 

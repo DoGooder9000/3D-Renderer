@@ -1,7 +1,7 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "point.h"
+#include "point.hpp"
 
 typedef struct{
 	float matrix[4][4] = {0};

@@ -1,4 +1,4 @@
-#include "headers/mesh.h"
+#include "headers/mesh.hpp"
 
 void Point3DtoPoint2D(Point3D* in, Point2D* out){
 	out->x = in->x;

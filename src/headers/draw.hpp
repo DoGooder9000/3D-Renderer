@@ -2,8 +2,8 @@
 #define DRAW_H
 
 #include <SDL2/sdl.h>
-#include "point.h"
-#include "mesh.h"
+#include "point.hpp"
+#include "mesh.hpp"
 
 void DrawPoint2D(SDL_Renderer* Renderer, Point2D point);
 void DrawPoint3D(SDL_Renderer* Renderer, Point3D point);

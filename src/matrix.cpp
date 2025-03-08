@@ -1,4 +1,4 @@
-#include "headers/matrix.h"
+#include "headers/matrix.hpp"
 
 void MultiplyMatrix4x4(Point3D* point1, Point3D* point2, Matrix4x4 mat){
 	point2->x = point1->x * mat.matrix[0][0] + point1->y * mat.matrix[1][0] + point1->z * mat.matrix[2][0] + mat.matrix[3][0];

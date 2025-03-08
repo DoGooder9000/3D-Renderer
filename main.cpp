@@ -3,11 +3,11 @@
 
 #include <SDL2/SDL.h>
 
-#include "src/headers/draw.h"
-#include "src/headers/point.h"
-#include "src/headers/settings.h"
-#include "src/headers/mesh.h"
-#include "src/headers/projection.h"
+#include "src/headers/draw.hpp"
+#include "src/headers/point.hpp"
+#include "src/headers/settings.hpp"
+#include "src/headers/mesh.hpp"
+#include "src/headers/projection.hpp"
 
 int Deltatime(int newtime, int oldtime);
 float FPS(int deltatime);

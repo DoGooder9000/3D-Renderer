@@ -1,4 +1,4 @@
-#include "headers/draw.h"
+#include "headers/draw.hpp"
 
 void DrawPoint2D(SDL_Renderer* Renderer, Point2D point){
 	SDL_RenderDrawPoint(Renderer, (int)point.x, (int)point.y);

@@ -1,9 +1,9 @@
 #ifndef PROJ_H
 #define PROJ_H
 
-#include "matrix.h"
-#include "settings.h"
-#include "mesh.h"
+#include "matrix.hpp"
+#include "settings.hpp"
+#include "mesh.hpp"
 
 class Projector{
 	public:
